@@ -6,6 +6,7 @@ import { Badge } from './ui/badge';
 import { ROUTE_SEGMENT, ROUTES } from '@/lib/router/routes';
 import useAuthStore from '@/store/useAuthStore';
 import { logout } from '@/lib/api/auth';
+import { Bell, Search, Menu, BookOpen } from 'lucide-react';
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);

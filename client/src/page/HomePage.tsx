@@ -6,6 +6,7 @@ import { SearchBar } from '../components/search-bar';
 import { CategoryFilter } from '../components/category-filter';
 import { BookOpen, Plus, TrendingUp, CheckCircle, Clock } from 'lucide-react';
 import { useProblemsQuery } from '@/query/useProblemsQuery';
+import { useState } from 'react';
 
 // 인기 카테고리
 const popularCategories = [
@@ -16,6 +17,20 @@ const popularCategories = [
   { name: '생물학', icon: '🧬', color: 'bg-red-100 dark:bg-red-900' },
   { name: '전자공학', icon: '⚡', color: 'bg-orange-100 dark:bg-orange-900' },
 ];
+
+const [categories, setCategories] = useState<Set<string>>(new Set());
+const toggleCategory = (category: string) => {
+  setCategories(prev => {
+    const newSet = new Set(prev);
+    if (newSet.has(category)) {
+      newSet.delete(category);
+    } else {
+      newSet.add(category);
+    }
+    return newSet;
+  });
+};
+
 
 export default function HomePage() {
   const { data: problems, isSuccess } = useProblemsQuery();
@@ -75,7 +90,7 @@ export default function HomePage() {
                   <BookOpen className="mr-2 h-5 w-5 text-teal-500" />
                   카테고리
                 </h3>
-                <CategoryFilter />
+                <CategoryFilter toggleCategory={toggleCategory} categories={categories} />
               </CardContent>
             </Card>
 
