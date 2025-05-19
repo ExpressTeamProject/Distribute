@@ -18,11 +18,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noEmitOnError": false,
-    "skipLibCheck": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "strict": false,
-    
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
