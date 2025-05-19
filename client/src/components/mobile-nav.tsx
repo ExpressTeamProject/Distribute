@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, BookOpen, X, Search, Bell } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { ROUTE_SEGMENT, ROUTES } from '@/lib/router/routes';
 import useAuthStore from '@/store/useAuthStore';

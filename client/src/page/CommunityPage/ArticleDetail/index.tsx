@@ -35,7 +35,7 @@ export default function ArticleDetail() {
     queryFn: () => getArticle(articleId || ''),
   });
 
-  const { data: checkSaved, isLoading: isSavedItemLoading } = useQuery({
+  const { data: checkSaved } = useQuery({
     queryKey: [API_PATHS.SAVED_ITEMS.CHECK, articleId],
     queryFn: () => checkSavedItem(articleId, 'post'),
   });
