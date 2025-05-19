@@ -37,7 +37,7 @@ export default function ArticleDetail() {
 
   const { data: checkSaved } = useQuery({
     queryKey: [API_PATHS.SAVED_ITEMS.CHECK, articleId],
-    queryFn: () => checkSavedItem(articleId, 'post'),
+    queryFn: () => checkSavedItem(articleId, 'article'),
   });
 
   const { mutate: toggleLike } = useMutation({
@@ -55,7 +55,7 @@ export default function ArticleDetail() {
   });
 
   const { mutate: toggleSaved } = useMutation({
-    mutationFn: () => toggleSavedItem(articleId, 'post'),
+    mutationFn: () => toggleSavedItem(articleId, 'article'),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [API_PATHS.ARTICLES.DETAIL, articleId] });
       queryClient.invalidateQueries({ queryKey: [API_PATHS.SAVED_ITEMS.CHECK, articleId] });
