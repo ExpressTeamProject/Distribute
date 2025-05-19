@@ -18,22 +18,21 @@ const popularCategories = [
   { name: '전자공학', icon: '⚡', color: 'bg-orange-100 dark:bg-orange-900' },
 ];
 
-const [categories, setCategories] = useState<Set<string>>(new Set());
-const toggleCategory = (category: string) => {
-  setCategories(prev => {
-    const newSet = new Set(prev);
-    if (newSet.has(category)) {
-      newSet.delete(category);
-    } else {
-      newSet.add(category);
-    }
-    return newSet;
-  });
-};
-
-
 export default function HomePage() {
+  const [categories, setCategories] = useState<Set<string>>(new Set());
   const { data: problems, isSuccess } = useProblemsQuery();
+
+  const toggleCategory = (category: string) => {
+    setCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(category)) {
+        newSet.delete(category);
+      } else {
+        newSet.add(category);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <main className="flex-1">
