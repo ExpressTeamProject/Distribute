@@ -11,21 +11,45 @@ import { CircleSpinner } from '../spinner';
 import useToggleLikeProblemMutation from './useToggleLikeProblemMutation';
 import useToggleSolvedStatusMutation from './useToggleSolvedStatusMutation';
 import { useNavigate } from 'react-router';
-import useUserStore from '@/store/useAuthStore';
+import useAuthStore from '@/store/useAuthStore';
 import useDeleteProblemMutation from './useDeleteProblemMutation';
 import { useFileDownload } from '@/hooks/useDownload';
 import { Attachment } from '@/models/Problem';
 import { downloadProblemAttachment } from '@/lib/api/problem';
 import { toast } from 'sonner';
+import { checkSavedItem, toggleSavedItem } from '@/lib/api/saved-items';
+import { API_PATHS } from '@/lib/api/api-paths';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '@/lib/tanstack-query/query-client';
 
 function ProblemDetailCard({ problemId }: { problemId: string }) {
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const { user } = useAuthStore();
   const { data: problemRes, isSuccess } = useProblemDetailQuery(problemId || '0');
   const { mutate: toggleLikeProblem } = useToggleLikeProblemMutation(problemId || '0');
   const { mutate: toggleSolvedStatus } = useToggleSolvedStatusMutation(problemId || '0');
   const { mutate: deleteProblem } = useDeleteProblemMutation(problemId || '0');
   const { downloadFile, isDownloading } = useFileDownload();
+
+  // 저장 상태 확인 쿼리 추가
+  const { data: checkSaved } = useQuery({
+    queryKey: [API_PATHS.SAVED_ITEMS.CHECK, problemId],
+    queryFn: () => checkSavedItem(problemId, 'post'),
+    enabled: !!user, // 사용자가 로그인한 경우에만 실행
+  });
+
+  // 저장 토글 뮤테이션 추가
+  const { mutate: toggleSaved } = useMutation({
+    mutationFn: () => toggleSavedItem(problemId, 'post'),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [API_PATHS.SAVED_ITEMS.CHECK, problemId] });
+      toast.success(data.message || '저장되었습니다');
+    },
+    onError: (error) => {
+      console.error('저장 오류:', error);
+      toast.error('저장 중 오류가 발생했습니다');
+    }
+  });
 
   const [showShareSuccess, setShowShareSuccess] = useState(false);
   const handleShare = () => {
@@ -51,6 +75,15 @@ function ProblemDetailCard({ problemId }: { problemId: string }) {
       console.error(error);
       toast.error('첨부 파일을 다운로드 하는 중 오류가 발생했습니다.');
     }
+  };
+
+  // 저장 핸들러 추가
+  const handleSave = () => {
+    if (!user) {
+      toast.warning('로그인 후 이용해주세요.');
+      return;
+    }
+    toggleSaved();
   };
 
   const isAuthor = user?.username === problemRes?.data.author.username;
@@ -172,7 +205,10 @@ function ProblemDetailCard({ problemId }: { problemId: string }) {
             <Button
               variant="ghost"
               size="sm"
-              className="flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400"
+              className={`flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 ${
+                checkSaved?.isSaved ? 'text-teal-500 dark:text-teal-400' : ''
+              }`}
+              onClick={handleSave}
             >
               <Bookmark className="h-4 w-4" />
               <span>저장</span>
