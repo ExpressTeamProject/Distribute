@@ -1,13 +1,18 @@
 const express = require('express');
 const cors = require('cors');
+const allowedOrigins = [
+  'https://ks-hakmoon-frontend.onrender.com',
+];
+
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production'
-    ? [
-        process.env.CLIENT_URL, 
-        'https://ks-hakmoon-frontend.onrender.com',
-      ]
-    : "http://localhost:5173",
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 };
 const path = require('path');
 const swaggerConfig = require('./config/swagger');
