@@ -349,6 +349,23 @@ exports.addAttachments = asyncHandler(async (req, res) => {
 // @access  Private (소유자만)
 exports.removeAttachment = asyncHandler(async (req, res) => {
   const post = req.resource; // checkOwnership 미들웨어에서 설정됨
+  
+  // post 객체 확인
+  if (!post) {
+    return res.status(404).json({
+      success: false,
+      message: '게시글을 찾을 수 없습니다'
+    });
+  }
+  
+  // attachments 속성 확인
+  if (!post.attachments || !Array.isArray(post.attachments)) {
+    return res.status(400).json({
+      success: false,
+      message: '이 게시글에는 첨부파일이 없습니다'
+    });
+  }
+  
   const filename = req.params.filename;
   
   // 해당 첨부파일 찾기
