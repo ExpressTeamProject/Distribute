@@ -14,7 +14,7 @@ export const getSavedItems = async () => {
   return response.json();
 };
 
-export const toggleSavedItem = async (itemId: string, itemType: 'project' | 'post') => {
+export const toggleSavedItem = async (itemId: string, itemType: 'post' | 'article') => {
   const response = await kyInstance.post<ResApi & { isSaved: boolean; message: string }>(API_PATHS.SAVED_ITEMS.TOGGLE, {
     json: {
       itemId,
@@ -25,7 +25,7 @@ export const toggleSavedItem = async (itemId: string, itemType: 'project' | 'pos
   return response.json();
 };
 
-export const checkSavedItem = async (itemId: string, itemType: 'project' | 'post') => {
+export const checkSavedItem = async (itemId: string, itemType: 'post' | 'article') => {
   const searchParams = new URLSearchParams();
   searchParams.set('itemId', itemId);
   searchParams.set('itemType', itemType);
