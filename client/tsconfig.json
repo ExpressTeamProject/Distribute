@@ -6,6 +6,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "noEmitOnError": false
+    "noEmitOnError": false,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 }
