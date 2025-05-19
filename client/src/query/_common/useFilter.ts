@@ -37,7 +37,13 @@ function useFilter() {
   };
 
   const setSingleCategory = (category: string) => {
-    setSelectedCategories(new Set([category]));
+    // '전체'인 경우 빈 Set을 설정 (모든 카테고리를 포함)
+    if (category === '전체') {
+      setSelectedCategories(new Set());
+    } else {
+      // 그 외 카테고리는 해당 카테고리만 포함하는 Set 설정
+      setSelectedCategories(new Set([category]));
+    }
   };
 
   return { status, setStatus, tags, categories, toggleTag, toggleCategory, setSingleCategory };
