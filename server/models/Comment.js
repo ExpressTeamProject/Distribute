@@ -111,7 +111,7 @@ const CommentSchema = new mongoose.Schema(
       type: String,
       required: [true, '댓글 내용은 필수입니다'],
       trim: true,
-      maxlength: [500, '댓글은 최대 500자까지 가능합니다'],
+      maxlength: [2000, '댓글은 최대 2000자까지 가능합니다'],
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
