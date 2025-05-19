@@ -238,6 +238,14 @@ exports.deleteArticle = asyncHandler(async (req, res) => {
   // req.resource는 checkOwnership 미들웨어에서 설정됨
   const article = req.resource;
 
+  // article 객체 확인
+  if (!article) {
+    return res.status(404).json({
+      success: false,
+      message: '게시글을 찾을 수 없습니다'
+    });
+  }
+
   // 첨부파일 삭제
   if (article.attachments && article.attachments.length > 0) {
     for (const attachment of article.attachments) {
@@ -532,6 +540,14 @@ exports.getPopularTags = asyncHandler(async (req, res) => {
 exports.addAttachments = asyncHandler(async (req, res) => {
   const article = req.resource; // checkOwnership 미들웨어에서 설정됨
   
+  // article 객체 확인
+  if (!article) {
+    return res.status(404).json({
+      success: false,
+      message: '게시글을 찾을 수 없습니다'
+    });
+  }
+  
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({
       success: false,
@@ -539,8 +555,13 @@ exports.addAttachments = asyncHandler(async (req, res) => {
     });
   }
   
+  // 첨부파일 배열 초기화 (없는 경우)
+  if (!article.attachments) {
+    article.attachments = [];
+  }
+  
   // 첨부파일 개수 제한 (최대 3개)
-  if ((article.attachments?.length || 0) + req.files.length > 3) {
+  if (article.attachments.length + req.files.length > 3) {
     return res.status(400).json({
       success: false,
       message: '첨부파일은 최대 3개까지 업로드할 수 있습니다'
@@ -557,7 +578,7 @@ exports.addAttachments = asyncHandler(async (req, res) => {
   }));
   
   // 기존 첨부파일 배열에 새 파일 추가
-  article.attachments = [...(article.attachments || []), ...newAttachments];
+  article.attachments = [...article.attachments, ...newAttachments];
   
   await article.save();
   
@@ -572,6 +593,23 @@ exports.addAttachments = asyncHandler(async (req, res) => {
 // @access  Private (소유자만)
 exports.removeAttachment = asyncHandler(async (req, res) => {
   const article = req.resource; // checkOwnership 미들웨어에서 설정됨
+  
+  // article 객체 확인
+  if (!article) {
+    return res.status(404).json({
+      success: false,
+      message: '게시글을 찾을 수 없습니다'
+    });
+  }
+  
+  // attachments 속성 확인
+  if (!article.attachments || !Array.isArray(article.attachments)) {
+    return res.status(400).json({
+      success: false,
+      message: '이 게시글에는 첨부파일이 없습니다'
+    });
+  }
+  
   const filename = req.params.filename;
   
   // 해당 첨부파일 찾기

@@ -114,13 +114,26 @@ exports.updateComment = asyncHandler(async (req, res) => {
   // req.resource는 checkOwnership 미들웨어에서 설정됨
   const comment = req.resource;
 
+  // comment 객체 확인
+  if (!comment) {
+    return res.status(404).json({
+      success: false,
+      message: '댓글을 찾을 수 없습니다'
+    });
+  }
+
   // 내용 업데이트
   comment.content = req.body.content;
 
   // 새 첨부파일 처리
   if (req.files && req.files.length > 0) {
+    // 첨부파일 배열 초기화 (없는 경우)
+    if (!comment.attachments) {
+      comment.attachments = [];
+    }
+    
     // 첨부파일 개수 제한 (최대 2개)
-    if ((comment.attachments?.length || 0) + req.files.length > 2) {
+    if (comment.attachments.length + req.files.length > 2) {
       return res.status(400).json({
         success: false,
         message: '댓글 첨부파일은 최대 2개까지 업로드할 수 있습니다'
@@ -137,7 +150,7 @@ exports.updateComment = asyncHandler(async (req, res) => {
     }));
     
     // 기존 첨부파일 배열에 새 파일 추가
-    comment.attachments = [...(comment.attachments || []), ...newAttachments];
+    comment.attachments = [...comment.attachments, ...newAttachments];
   }
 
   // 저장
@@ -155,6 +168,14 @@ exports.updateComment = asyncHandler(async (req, res) => {
 exports.deleteComment = asyncHandler(async (req, res) => {
   // req.resource는 checkOwnership 미들웨어에서 설정됨
   const comment = req.resource;
+
+  // comment 객체 확인
+  if (!comment) {
+    return res.status(404).json({
+      success: false,
+      message: '댓글을 찾을 수 없습니다'
+    });
+  }
 
   // 첨부파일이 있다면 삭제
   if (comment.attachments && comment.attachments.length > 0) {
@@ -416,12 +437,29 @@ exports.toggleLike = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    댓글 첨부파일 삭제
+// @desc    댓글에서 첨부파일 삭제
 // @route   DELETE /api/comments/:id/attachments/:filename
 // @access  Private (소유자만)
 exports.removeAttachment = asyncHandler(async (req, res) => {
   // req.resource는 checkOwnership 미들웨어에서 설정됨
   const comment = req.resource;
+  
+  // comment 객체 확인
+  if (!comment) {
+    return res.status(404).json({
+      success: false,
+      message: '댓글을 찾을 수 없습니다'
+    });
+  }
+  
+  // attachments 속성 확인
+  if (!comment.attachments || !Array.isArray(comment.attachments)) {
+    return res.status(400).json({
+      success: false,
+      message: '이 댓글에는 첨부파일이 없습니다'
+    });
+  }
+  
   const filename = req.params.filename;
   
   // 해당 첨부파일 찾기

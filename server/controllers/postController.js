@@ -463,6 +463,14 @@ exports.deletePost = asyncHandler(async (req, res) => {
   // req.resource는 checkOwnership 미들웨어에서 설정됨
   const post = req.resource;
 
+  // post 객체 확인
+  if (!post) {
+    return res.status(404).json({
+      success: false,
+      message: '게시글을 찾을 수 없습니다'
+    });
+  }
+
   // 첨부파일이 있는 경우 파일 시스템에서 삭제
   if (post.attachments && post.attachments.length > 0) {
     for (const attachment of post.attachments) {
