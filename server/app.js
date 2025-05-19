@@ -2,9 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
-    ? [process.env.CLIENT_URL, 'https://ks-hakmoon-frontend.onrender.com']
+    ? [
+        process.env.CLIENT_URL, 
+        'https://ks-hakmoon-frontend.onrender.com',
+      ]
     : "http://localhost:5173",
-  credentials: true,
+  credentials: true
 };
 const path = require('path');
 const swaggerConfig = require('./config/swagger');
