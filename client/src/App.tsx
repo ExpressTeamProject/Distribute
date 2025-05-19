@@ -9,7 +9,7 @@ import SolvedProblemsPage from './page/SolvedProblemsPage';
 import CommunityPage from './page/CommunityPage';
 import CommunityNewPage from './page/CommunityNewPage';
 import RankingPage from './page/RankingPage/RankingPage';
-import UserProfilePage from './page/UserProfilePage/UserProfilePage';
+import UserProfilePage from './page/UserProfilePage';
 import ProfileEditPage from './page/ProfileEditPage';
 import SearchResultsPage from './page/SearchResultPages/SearchResultsPage';
 import AboutPage from './components/footer/AboutPage';

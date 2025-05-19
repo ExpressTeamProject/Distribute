@@ -41,7 +41,7 @@ export const createArticle = async (data: ArticleForm) => {
   formData.append('tags', data.tags?.join(',') ?? '');
 
   if (data.files && data.files.length > 0) {
-    data.files.forEach((file, index) => {
+    data.files.forEach((file) => {
       formData.append(`files`, file);
     });
   }
