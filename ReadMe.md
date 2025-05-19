@@ -1,6 +1,7 @@
 # 📚 학문 공유 - 전공 공유 플랫폼
 
-![thumb](/images/thumb.png)
+![thumb](https://github.com/user-attachments/assets/994c4761-e88e-4a5b-be19-e04ddcc58355)
+
 
 > 전공자들을 위한 지식 공유 & 소통 게시판 🧑‍🎓  
 > 자료 업로드, 댓글, 태그 분류까지! 전공 정보를 함께 나누는 공간
@@ -57,15 +58,18 @@ Deploy : Vercel (프론트), Heroku or Render (백엔드)
 
 ## ERD
 
-![ERD](/images/ERD.png)
+![ERD](https://github.com/user-attachments/assets/75904f3b-ee22-460d-a501-f6f4cad9d168)
+
 
 ## 📌 스택 아키텍처
 
-![stack](/images/Figma.png)
+![Figma](https://github.com/user-attachments/assets/d4ceedaf-df97-4a0f-b3e9-cb15685bb41b)
+
 
 ## 📆 프로젝트 일정
 
-![gantt](/images/Gantt.png)
+![Gantt](https://github.com/user-attachments/assets/58b1e26f-1685-4604-a668-46c9c0a8cd2f)
+
 
 ## 🔑 트러블 슈팅 상세 보기
 
