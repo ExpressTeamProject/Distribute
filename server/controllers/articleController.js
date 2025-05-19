@@ -235,37 +235,57 @@ exports.updateArticle = asyncHandler(async (req, res) => {
 // @route   DELETE /api/articles/:id
 // @access  Private (소유자만)
 exports.deleteArticle = asyncHandler(async (req, res) => {
+  console.log(`deleteArticle 시작: ID=${req.params.id}`);
+  
   // req.resource는 checkOwnership 미들웨어에서 설정됨
   const article = req.resource;
+  console.log(`article 객체: ${article ? '있음' : '없음'}`);
 
   // article 객체 확인
   if (!article) {
+    console.log(`게시글을 찾을 수 없음: ${req.params.id}`);
     return res.status(404).json({
       success: false,
       message: '게시글을 찾을 수 없습니다'
     });
   }
 
+  console.log(`게시글 정보: ID=${article._id}, 제목=${article.title}, 작성자=${article.author}`);
+
   // 첨부파일 삭제
   if (article.attachments && article.attachments.length > 0) {
+    console.log(`첨부파일 개수: ${article.attachments.length}`);
     for (const attachment of article.attachments) {
       try {
         const filePath = path.join(process.cwd(), attachment.path.replace(/^\//, ''));
+        console.log(`파일 삭제 시도: ${filePath}`);
         await fs.unlink(filePath);
+        console.log(`파일 삭제 성공: ${filePath}`);
       } catch (error) {
-        console.error('파일 삭제 실패:', error.message);
+        console.error(`파일 삭제 실패: ${error.message}`);
         // 파일 삭제 실패해도 계속 진행
       }
     }
   }
 
-  // 게시글 삭제
-  await article.deleteOne();
-
-  res.status(200).json({
-    success: true,
-    data: {}
-  });
+  try {
+    // 게시글 삭제
+    console.log(`게시글 삭제 시도: ${article._id}`);
+    const result = await article.deleteOne();
+    console.log(`게시글 삭제 결과: ${JSON.stringify(result)}`);
+    
+    res.status(200).json({
+      success: true,
+      data: {}
+    });
+  } catch (error) {
+    console.error(`게시글 삭제 중 오류: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      message: '게시글 삭제 중 오류가 발생했습니다',
+      error: error.message
+    });
+  }
 });
 
 // @desc    커뮤니티 게시글 좋아요/좋아요 취소
