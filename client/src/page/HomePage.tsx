@@ -45,7 +45,7 @@ export default function HomePage() {
                 전공 문제 공유 플랫폼
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl dark:text-gray-400">
-                다양한 전공 분야의 문제를 공유하고 함께 해결해보세요. 학습 커뮤니티와 함께 성장하세요.
+                다양한 전공 분야의 문제를 공유하고 함께 해결해보세요. 커뮤니티와 함께 성장하세요.
               </p>
             </div>
             <div className="w-full max-w-md space-y-4">
